@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">chips_java</string>
+    <string-array name="name">
+        <item>a1</item>
+        <item>bb</item>
+        <item>ac1</item>
+        <item>a1</item>
+        <item>a1</item>
+        <item>a1</item>
+
+    </string-array>
+</resources>
