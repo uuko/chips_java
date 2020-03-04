@@ -40,6 +40,9 @@ public class MyDiffUtilCallback extends DiffUtil.Callback {
             return false;//如果有内容不同，就返回false
         }
         return true; //默认两个data内容是相同的
+
+
+
     }
 
 }
