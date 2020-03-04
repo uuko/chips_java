@@ -24,11 +24,22 @@ public class MyDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldItemPosition==newItemPosition;
+        return oldList.get(oldItemPosition).getName().equals(newList.get(newItemPosition).getName());
     }
+
+//    @Override
+//    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+//        return oldList.get(oldItemPosition) == newList.get(newItemPosition);
+//    }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition) == newList.get(newItemPosition);
+        Contact beanOld = oldList.get(oldItemPosition);
+        Contact beanNew = newList.get(newItemPosition);
+        if (beanOld.getPinId()!=(beanNew.getPinId())) {
+            return false;//如果有内容不同，就返回false
+        }
+        return true; //默认两个data内容是相同的
     }
+
 }

@@ -48,10 +48,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
     public void  updateList(List<Contact> newcontacts){
         MyDiffUtilCallback diffUtilCallback=new MyDiffUtilCallback(Contacts,newcontacts);
-        DiffUtil.DiffResult diffResult=DiffUtil.calculateDiff(diffUtilCallback);
+        DiffUtil.DiffResult diffResult=DiffUtil.calculateDiff(diffUtilCallback,true);
+        diffResult.dispatchUpdatesTo(this);
         Contacts.clear();
         Contacts.addAll(newcontacts);
-        diffResult.dispatchUpdatesTo(this);
+    }
+    public void  oldupdateList(List<Contact> newcontacts){
+
+        Contacts.clear();
+        Contacts.addAll(newcontacts);
+        notifyDataSetChanged();
     }
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CircleImageView circleImageView;

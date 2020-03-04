@@ -5,14 +5,19 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
     private ChipGroup chipGroup;
     private Button button;
     private List<Contact> Contacts=new ArrayList<>();
+    private List<Contact> NewContacts=new ArrayList<>();
+    private View view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,19 +43,32 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
         input=findViewById(R.id.txt_name);
         chipGroup=findViewById(R.id.chipGroup);
         button=findViewById(R.id.adddd);
+//        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+//                .findViewById(android.R.id.content)).getChildAt(0);
+        input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event!= null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(input.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                return false;
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NewContacts.clear();
                 List<String> name= Arrays.asList(getResources().getStringArray(R.array.name));
-                int [] images={R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,
-                        R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
+                int [] images={R.drawable.ic_launcher_background,R.drawable.ic_launcher_foreground,R.drawable.ic_launcher_background};
                 int count=0;
                 for (String Name:name) {
-                    Contacts.add(new Contact(Name,images[count]));
+                    NewContacts.add(new Contact(Name,images[count]));
                     count++;
                 }
-                recyclerAdapter.updateList(Contacts);
+           recyclerAdapter.updateList(NewContacts);
+                //recyclerAdapter.oldupdateList(NewContacts);
                 recyclerView.setAdapter(recyclerAdapter);
+
 //                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
             }
         });
@@ -76,11 +96,21 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
                 }
                 recyclerAdapter=new RecyclerAdapter(MainActivity.this,Newcontacts);
                 recyclerView.setAdapter(recyclerAdapter);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+//                getWindow().getDecorView().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        if (imm != null) {
+//                            viewGroup.requestFocus();
+//                            imm.showSoftInput(viewGroup, 0);
+//                        }
+//                    }
+//                }, 100);
             }
         });
 
@@ -102,8 +132,7 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
 
     private void  getContacts(){
         List<String> name= Arrays.asList(getResources().getStringArray(R.array.name));
-        int [] images={R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,
-                R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
+        int [] images={R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
         int count=0;
         for (String Name:name) {
             Contacts.add(new Contact(Name,images[count]));
