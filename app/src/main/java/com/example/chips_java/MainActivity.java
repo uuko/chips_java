@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.material.chip.Chip;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
     private RecyclerAdapter recyclerAdapter;
     private EditText input;
     private ChipGroup chipGroup;
+    private Button button;
     private List<Contact> Contacts=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,23 @@ public class MainActivity extends AppCompatActivity implements RecycleItemSelect
         recyclerView=findViewById(R.id.recycleview);
         input=findViewById(R.id.txt_name);
         chipGroup=findViewById(R.id.chipGroup);
-
+        button=findViewById(R.id.adddd);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> name= Arrays.asList(getResources().getStringArray(R.array.name));
+                int [] images={R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,
+                        R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
+                int count=0;
+                for (String Name:name) {
+                    Contacts.add(new Contact(Name,images[count]));
+                    count++;
+                }
+                recyclerAdapter.updateList(Contacts);
+                recyclerView.setAdapter(recyclerAdapter);
+//                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         getContacts();

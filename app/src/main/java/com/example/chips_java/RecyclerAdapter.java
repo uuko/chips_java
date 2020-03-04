@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +46,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public int getItemCount() {
         return Contacts.size();
     }
-
+    public void  updateList(List<Contact> newcontacts){
+        MyDiffUtilCallback diffUtilCallback=new MyDiffUtilCallback(Contacts,newcontacts);
+        DiffUtil.DiffResult diffResult=DiffUtil.calculateDiff(diffUtilCallback);
+        Contacts.clear();
+        Contacts.addAll(newcontacts);
+        diffResult.dispatchUpdatesTo(this);
+    }
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CircleImageView circleImageView;
         TextView textView;
@@ -64,11 +71,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         }
 
-        public void  updateList(List<Contact> newcontacts){
-            Contacts.clear();
-            Contacts.addAll(newcontacts);
-            notifyDataSetChanged();
-        }
+
 
     }
 }
